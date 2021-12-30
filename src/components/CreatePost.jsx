@@ -1,20 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { addDoc, collection } from "firebase/firestore";
 import { db, auth } from "../firebase-config";
 import { useNavigate } from "react-router-dom";
 import { Button, Input, Row, Col, Form, Space } from "antd";
 
 const CreatePost = ({ isAuth }) => {
+  const [loading, setLoading] = useState(false);
   const postsCollectionRef = collection(db, "posts");
   let navigate = useNavigate();
 
   const onFinish = async (values) => {
+    setLoading(true);
     await addDoc(postsCollectionRef, {
       title: values.title,
       text: values.text,
       date: new Date(),
       author: { name: auth.currentUser.displayName, id: auth.currentUser.uid },
     });
+    setLoading(false);
     navigate("/home");
   };
 
@@ -57,8 +60,8 @@ const CreatePost = ({ isAuth }) => {
           >
             <Input.TextArea showCount maxLength={600} rows={10} />
           </Form.Item>
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit">
+          <Form.Item wrapperCol={{ offset: 3, span: 16 }}>
+            <Button type="primary" htmlType="submit" loading={loading}>
               Create post
             </Button>
           </Form.Item>

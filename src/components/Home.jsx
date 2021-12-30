@@ -9,77 +9,86 @@ import moment from "moment";
 const Home = ({ isAuth }) => {
   const [postList, setPostList] = useState([]);
   const postCollecionRef = collection(db, "posts");
-  const [isLoading, setIsloading] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   useEffect(() => {
-    setIsloading(true);
-    setTimeout(() => {
-      const getPosts = async () => {
-        const data = await getDocs(postCollecionRef);
-        setPostList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-      };
-      setIsloading(false);
-      getPosts();
-    }, 3000);
+    getPosts();
   }, []);
 
+  const getPosts = async () => {
+    const data = await getDocs(postCollecionRef);
+    setPostList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
+
   const deletePost = async (id) => {
+    setButtonLoading(true);
     const postDoc = doc(db, "posts", id);
     await deleteDoc(postDoc);
+    setButtonLoading(false);
+    window.location = "/home";
   };
 
   return (
     <Row justify="center" style={{ marginTop: "16px" }}>
       <Col span={7}>
         <Row justify="start">
-          <div style={{ marginRight: "16px" }}>
-            <Avatar
-              src={
-                <Image
-                  src="https://joeschmoe.io/api/v1/random"
-                  style={{ width: 32 }}
-                />
-              }
-            />
-          </div>
-          <div>
-            <h1>@bozorovvv</h1>
-          </div>
-        </Row>
-        {isLoading ? (
-          <Row justify="center" align="middle" style={{ height: "80vh" }}>
-            <Col>
-              <LoadingOutlined style={{ height: "100px" }} />
-            </Col>
-          </Row>
-        ) : (
           <Col>
-            {postList.map((post) => (
-              <>
-                <p
-                  style={{
-                    fontSize: "2.5em",
-                    fontWeight: "bold",
-                    margin: "16px 0 0 0",
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <div style={{ marginRight: "16px" }}>
+                <Avatar
+                  src={
+                    <Image
+                      src="https://joeschmoe.io/api/v1/random"
+                      style={{ width: 32 }}
+                    />
+                  }
+                />
+              </div>
+              <div>
+                <p style={{ margin: "0", fontSize: "1em" }}>@bozorovvv</p>
+              </div>
+            </div>
+          </Col>
+        </Row>
+        <Col>
+          {postList.map((post) => (
+            <>
+              <p
+                style={{
+                  fontSize: "2.5em",
+                  fontWeight: "bold",
+                  margin: "16px 0 0 0",
+                }}
+              >
+                {post.title}
+              </p>
+              <p style={{ fontSize: "0.9em" }}>
+                {moment.unix(post.date.seconds).format("LL")}
+              </p>
+              <p style={{ fontSize: "1.4em" }}>{post.text}</p>
+              <div tyle={{ height: "1px solid #eee" }}></div>
+              <Link style={{ marginRight: "16px" }} to="">
+                @bozorovvv
+              </Link>
+              {isAuth && post.author.name === "farhod bozorov" && (
+                <Button
+                  loading={buttonLoading}
+                  onClick={() => {
+                    deletePost(post.id);
                   }}
                 >
-                  {post.title}
-                </p>
-                <p style={{ fontSize: "0.9em" }}>
-                  {moment.unix(post.date.seconds).format("LL")}
-                </p>
-                <p style={{ fontSize: "1.4em" }}>{post.text}</p>
-                <hr />
-                <Link style={{ marginRight: "16px" }} to="">
-                  @bozorovvv
-                </Link>
-                {isAuth && post.author.name === "farhod bozorov" && (
-                  <Button onClick={() => deletePost(post.id)}>delete</Button>
-                )}
-              </>
-            ))}
-          </Col>
-        )}
+                  delete
+                </Button>
+              )}
+            </>
+          ))}
+        </Col>
       </Col>
     </Row>
   );

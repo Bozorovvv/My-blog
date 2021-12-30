@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import React, { useState } from "react";
-import { signOut } from "firebase/auth";
+import React, { useState, useEffect } from "react";
+import { signOut, getAuth } from "firebase/auth";
 import { auth } from "./firebase-config";
 import CreatePost from "./components/CreatePost";
 import Login from "./components/Login";
@@ -9,12 +9,22 @@ import { Button } from "antd";
 import { ExportOutlined } from "@ant-design/icons";
 import "./App.css";
 
+
 function App() {
+  const [me, setMe] = useState("");
   const [isAuth, setIsAuth] = useState(
     localStorage.getItem("isAuth") === null
       ? false
       : localStorage.getItem("isAuth")
   );
+
+  useEffect(() => {
+    async function someFunction() {
+      const auth1 = await getAuth();
+      setMe(auth1.currentUser.email);
+    }
+    someFunction();
+  }, []);
 
   const signUserOut = () => {
     signOut(auth).then(() => {
@@ -24,48 +34,23 @@ function App() {
     });
   };
 
-  console.log(isAuth);
-
   return (
     <Router>
-      <nav
-        style={{
-          position: "fixed",
-          bottom: "0",
-          width: "100%",
-          zIndex: "10",
-          border: "1px solid #eee",
-        }}
-      >
-        {!isAuth && (
+      <nav>
+        {isAuth && (
           <>
-            <Link
-              style={{ fontWeight: "bolder", color: "#000", margin: "0 32px" }}
-              to="/login"
-            >
-              Login
-            </Link>
-
-            <Link
-              style={{
-                fontWeight: "bolder",
-                color: "#000",
-                margin: "0 32px",
-              }}
-              to="/home"
-            >
-              Home
-            </Link>
-            <Link
-              style={{
-                fontWeight: "bolder",
-                color: "#000",
-                margin: "0 32px",
-              }}
-              to="/createpost"
-            >
-              CreatePost
-            </Link>
+            {me && (
+              <Link
+                style={{
+                  fontWeight: "bolder",
+                  color: "#000",
+                  margin: "0 32px",
+                }}
+                to="/createpost"
+              >
+                CreatePost
+              </Link>
+            )}
             <Button
               style={{ color: "#000", margin: "0 32px" }}
               onClick={signUserOut}
