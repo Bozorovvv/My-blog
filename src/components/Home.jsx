@@ -10,14 +10,13 @@ const Home = ({ isAuth }) => {
   const postCollecionRef = collection(db, "posts");
   const [buttonLoading, setButtonLoading] = useState("");
 
-  const getPosts = async () => {
-    const data = await getDocs(postCollecionRef);
-    setPostList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-  };
-
   useEffect(() => {
+    const getPosts = async () => {
+      const data = await getDocs(postCollecionRef);
+      setPostList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
     getPosts();
-  }, [postCollecionRef]);
+  }, []);
 
   const deletePost = async (id) => {
     setButtonLoading(id);
