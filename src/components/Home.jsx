@@ -12,7 +12,7 @@ const Home = ({ isAuth }) => {
 
   useEffect(() => {
     getPosts();
-  }, []);
+  });
 
   const getPosts = async () => {
     const data = await getDocs(postCollecionRef);
@@ -70,7 +70,6 @@ const Home = ({ isAuth }) => {
               <p style={{ fontSize: "0.9em" }}>
                 {moment.unix(todo.date.seconds).format("LL")}
               </p>
-              <p style={{ fontSize: "1.4em" }}>{todo.text}</p>
               <div tyle={{ height: "1px solid #eee" }}></div>
               <Link style={{ marginRight: "16px" }} to="">
                 @bozorovvv
