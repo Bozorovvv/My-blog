@@ -12,7 +12,7 @@ const Home = ({ isAuth }) => {
 
   useEffect(() => {
     const getPosts = async () => {
-      const data = await getDocs(postCollecionRef);
+      const data = await getDocs(postCollecionRef); // eslint-disable-line
       setPostList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
     getPosts();
