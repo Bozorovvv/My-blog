@@ -17,7 +17,7 @@ const Home = ({ isAuth }) => {
 
   useEffect(() => {
     getPosts();
-  }, [setPostList]);
+  }, [postCollecionRef]);
 
   const deletePost = async (id) => {
     setButtonLoading(id);
