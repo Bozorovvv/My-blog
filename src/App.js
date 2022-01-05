@@ -27,27 +27,23 @@ function App() {
   return (
     <Router>
       <nav>
-        {isAuth && (
-          <>
-            <Link
-              style={{
-                fontWeight: "bolder",
-                color: "#000",
-                margin: "0 32px",
-              }}
-              to="/createpost"
-            >
-              CreateTodo
-            </Link>
+        <Link
+          style={{
+            fontWeight: "bolder",
+            color: "#000",
+            margin: "0 32px",
+          }}
+          to="/createpost"
+        >
+          CreateTodo
+        </Link>
 
-            <Button
-              style={{ color: "#000", margin: "0 32px" }}
-              onClick={signUserOut}
-            >
-              <ExportOutlined />
-            </Button>
-          </>
-        )}
+        <Button
+          style={{ color: "#000", margin: "0 32px" }}
+          onClick={signUserOut}
+        >
+          <ExportOutlined />
+        </Button>
       </nav>
       <Routes>
         <Route path="*" element={<Login setIsAuth={setIsAuth} />} />

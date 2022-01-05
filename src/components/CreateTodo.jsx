@@ -3,7 +3,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { db, auth } from "../firebase-config";
 import { Button, Input, Row, Col, Form, Space } from "antd";
 
-const CreatePost = ({ isAuth }) => {
+const CreatePost = () => {
   const [loading, setLoading] = useState(false);
   const postsCollectionRef = collection(db, "posts");
 
