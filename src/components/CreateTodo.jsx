@@ -24,7 +24,7 @@ const CreatePost = ({ isAuth }) => {
     if (!isAuth) {
       navigate("/login");
     }
-  });
+  }, [isAuth, navigate]);
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);

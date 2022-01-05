@@ -12,7 +12,7 @@ const Home = ({ isAuth }) => {
 
   useEffect(() => {
     getPosts();
-  });
+  }, [getPosts]);
 
   const getPosts = async () => {
     const data = await getDocs(postCollecionRef);
