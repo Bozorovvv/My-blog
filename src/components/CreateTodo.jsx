@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { addDoc, collection } from "firebase/firestore";
 import { db, auth } from "../firebase-config";
-import { useNavigate } from "react-router-dom";
 import { Button, Input, Row, Col, Form, Space } from "antd";
 
 const CreatePost = ({ isAuth }) => {
   const [loading, setLoading] = useState(false);
   const postsCollectionRef = collection(db, "posts");
-  let navigate = useNavigate();
 
   const onFinish = async (values) => {
     setLoading(true);
@@ -17,14 +15,8 @@ const CreatePost = ({ isAuth }) => {
       author: { name: auth.currentUser.displayName, id: auth.currentUser.uid },
     });
     setLoading(false);
-    navigate("/home");
+    window.location = "/home";
   };
-
-  useEffect(() => {
-    if (!isAuth) {
-      navigate("/login");
-    }
-  }, [isAuth, navigate]);
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);

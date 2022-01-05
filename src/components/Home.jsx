@@ -12,11 +12,11 @@ const Home = ({ isAuth }) => {
 
   useEffect(() => {
     const getPosts = async () => {
-      const data = await getDocs(postCollecionRef); // eslint-disable-line
+      const data = await getDocs(postCollecionRef);
       setPostList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
     getPosts();
-  }, []);
+  }, [postCollecionRef]);
 
   const deletePost = async (id) => {
     setButtonLoading(id);
