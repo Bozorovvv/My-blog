@@ -13,7 +13,6 @@ const CreatePost = ({ isAuth }) => {
     setLoading(true);
     await addDoc(postsCollectionRef, {
       title: values.title,
-      text: values.text,
       date: new Date(),
       author: { name: auth.currentUser.displayName, id: auth.currentUser.uid },
     });
@@ -37,7 +36,7 @@ const CreatePost = ({ isAuth }) => {
           direction="horizontal"
           style={{ width: "100%", justifyContent: "center" }}
         >
-          <h2>Create posts</h2>
+          <h2>Create todo</h2>
         </Space>
         <Form
           name="basic"
@@ -52,13 +51,6 @@ const CreatePost = ({ isAuth }) => {
             rules={[{ required: true, message: "empty" }]}
           >
             <Input />
-          </Form.Item>
-          <Form.Item
-            label="Text"
-            name="text"
-            rules={[{ required: true, message: "empty" }]}
-          >
-            <Input.TextArea showCount maxLength={600} rows={10} />
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 3, span: 16 }}>
             <Button type="primary" htmlType="submit" loading={loading}>

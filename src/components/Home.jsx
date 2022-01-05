@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../firebase-config";
 import { Button, Row, Col, Avatar, Image } from "antd";
 import { Link } from "react-router-dom";
-import { LoadingOutlined } from "@ant-design/icons";
 import moment from "moment";
 
 const Home = ({ isAuth }) => {
   const [postList, setPostList] = useState([]);
   const postCollecionRef = collection(db, "posts");
-  const [buttonLoading, setButtonLoading] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState("");
 
   useEffect(() => {
     getPosts();
@@ -21,7 +20,7 @@ const Home = ({ isAuth }) => {
   };
 
   const deletePost = async (id) => {
-    setButtonLoading(true);
+    setButtonLoading(id);
     const postDoc = doc(db, "posts", id);
     await deleteDoc(postDoc);
     setButtonLoading(false);
@@ -57,8 +56,8 @@ const Home = ({ isAuth }) => {
           </Col>
         </Row>
         <Col>
-          {postList.map((post) => (
-            <>
+          {postList.map((todo) => (
+            <Fragment key={todo.id}>
               <p
                 style={{
                   fontSize: "2.5em",
@@ -66,27 +65,27 @@ const Home = ({ isAuth }) => {
                   margin: "16px 0 0 0",
                 }}
               >
-                {post.title}
+                {todo.title}
               </p>
               <p style={{ fontSize: "0.9em" }}>
-                {moment.unix(post.date.seconds).format("LL")}
+                {moment.unix(todo.date.seconds).format("LL")}
               </p>
-              <p style={{ fontSize: "1.4em" }}>{post.text}</p>
+              <p style={{ fontSize: "1.4em" }}>{todo.text}</p>
               <div tyle={{ height: "1px solid #eee" }}></div>
               <Link style={{ marginRight: "16px" }} to="">
                 @bozorovvv
               </Link>
-              {isAuth && post.author.name === "farhod bozorov" && (
+              {isAuth && todo.author.name === "farhod bozorov" && (
                 <Button
-                  loading={buttonLoading}
+                  loading={buttonLoading === todo.id}
                   onClick={() => {
-                    deletePost(post.id);
+                    deletePost(todo.id);
                   }}
                 >
                   delete
                 </Button>
               )}
-            </>
+            </Fragment>
           ))}
         </Col>
       </Col>
